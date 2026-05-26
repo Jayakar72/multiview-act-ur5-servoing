@@ -85,7 +85,7 @@ This repository documents the architecture we built around that hypothesis: a th
                 ┌──────────────────────────────────────────────────────┐
                 │  Tier 2 — Multi-View Scene Registration              │
                 │  ─ Survey rectangle (8 waypoints around spawn)       │
-                │  ─ YOLOv8-OBB → PnP → world-frame port poses        │
+                │  ─ YOLOv8-OBB → PnP → world-frame port poses         │
                 │  ─ XY clustering → NIC registry                      │
                 │  ─ Rail-spacing constraint solving → mount indices   │
                 └────────────────────┬─────────────────────────────────┘
