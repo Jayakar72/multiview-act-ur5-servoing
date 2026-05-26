@@ -3,7 +3,7 @@
 <p align="center">
   <img src="assets/ur5_Servo.gif" alt="Data collection via CheatCode" width="48%"/>
   &nbsp;
-  <img src="assets/ur5_Servo_ACT.gif" alt="MultiViewACTPolicy executing live insertion" width="48%"/>
+  <img src="assets/ur5_Servo_ACT_policy.gif" alt="MultiViewACTPolicy executing live insertion" width="48%"/>
 </p>
 <p align="center">
   <em><b>Left:</b> Data collection — Intrinsic's <code>CheatCode</code> policy drives the robot through varied NIC poses to generate ground-truth-supervised training data for our ACT model and YOLO-OBB detector. &nbsp; <b>Right:</b> Deployment — our <code>MultiViewACTPolicy</code> autonomously inserts the cable into SFP and SC ports using multi-view perception + closed-loop visual servoing.</em>
