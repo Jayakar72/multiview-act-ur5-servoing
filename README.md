@@ -1,5 +1,11 @@
 # MultiView ACT UR5 Servoing
 
+<p align="center">
+  <img src="assets/ur5_Servo.gif" alt=" MultiView ACT UR5 Servoing — CheatCode data collection followed by our policy executing SFP and SC insertions " width="800"/>
+  <br/>
+  <em>Top: Intrinsic's <code>CheatCode</code> policy driving the robot through varied NIC poses for ground-truth-supervised YOLO-OBB data collection. Bottom: Our <code>MultiViewACTPolicy</code> performing live SFP and SC port insertions using multi-view perception + closed-loop visual servoing.</em>
+</p>
+
 > A hybrid robotic manipulation pipeline combining **Action Chunking with Transformers (ACT)**, **multi-view scene perception**, and **closed-loop visual servoing** for autonomous fiber-optic cable insertion on a UR5e arm.
 >
 > Built for the [AI for Industry Challenge 2026](https://github.com/intrinsic-dev/aic), an open robotics competition organized by [Intrinsic](https://www.intrinsic.ai/).
