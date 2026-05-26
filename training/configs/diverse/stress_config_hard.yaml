@@ -1,0 +1,345 @@
+# stress_config_hard.yaml
+# Three deliberately hard SFP trials to stress-test V11's bidirectional scout
+# and port disambiguation. Each trial isolates a different parameter axis
+# that EvalAI's randomization might be hitting.
+#
+# Trial 1: Far rail (rail_4) + max translation + max yaw — tests detection robustness at FOV edge
+# Trial 2: Mid rail (rail_2) + port_1 (not port_0) — tests rightmost/leftmost disambiguation
+# Trial 3: Near rail (rail_0) + max translation + negative yaw — your reported "missed in rail 0" case
+#
+# Cable type: sfp_sc_cable (SFP plug grasped, SC end free)
+# Target ports are all SFP (matches T1+T2 of qualification)
+
+# List of topics to subscribe.
+scoring:
+  topics:
+    - topic:
+        name: "/joint_states"
+        type: "sensor_msgs/msg/JointState"
+    - topic:
+        name: "/tf"
+        type: "tf2_msgs/msg/TFMessage"
+    - topic:
+        name: "/tf_static"
+        type: "tf2_msgs/msg/TFMessage"
+        latched: true
+    - topic:
+        name: "/scoring/tf"
+        type: "tf2_msgs/msg/TFMessage"
+    - topic:
+        name: "/aic/gazebo/contacts/off_limit"
+        type: "ros_gz_interfaces/msg/Contacts"
+    - topic:
+        name: "/fts_broadcaster/wrench"
+        type: "geometry_msgs/msg/WrenchStamped"
+    - topic:
+        name: "/aic_controller/joint_commands"
+        type: "aic_control_interfaces/msg/JointMotionUpdate"
+    - topic:
+        name: "/aic_controller/pose_commands"
+        type: "aic_control_interfaces/msg/MotionUpdate"
+    - topic:
+        name: "/scoring/insertion_event"
+        type: "std_msgs/msg/String"
+    - topic:
+        name: "/aic_controller/controller_state"
+        type: "aic_control_interfaces/msg/ControllerState"
+
+task_board_limits:
+  nic_rail:
+    min_translation: -0.0215
+    max_translation: 0.0234
+  sc_rail:
+    min_translation: -0.06
+    max_translation: 0.055
+  mount_rail:
+    min_translation: -0.09425
+    max_translation: 0.09425
+
+trials:
+
+  # ─── TRIAL 1: FAR RAIL (rail_4) + MAX TRANSLATION + +10° YAW ───
+  # Stress: NIC at far end of the board, max yaw deviation.
+  # Tests: detection at FOV edge, scout if needed, homing to oblique pose.
+  trial_1:
+    scene:
+        task_board:
+          pose:
+            x: 0.15
+            y: -0.2
+            z: 1.14
+            roll: 0.0
+            pitch: 0.0
+            yaw: 3.1415
+          nic_rail_0:
+            entity_present: False
+          nic_rail_1:
+            entity_present: False
+          nic_rail_2:
+            entity_present: False
+          nic_rail_3:
+            entity_present: False
+          nic_rail_4:
+            entity_present: True
+            entity_name: "nic_card_4"
+            entity_pose:
+              translation: 0.0234     # MAX positive translation along rail
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.1745             # +10° (max)
+          sc_rail_0:
+            entity_present: False
+          sc_rail_1:
+            entity_present: False
+          lc_mount_rail_0:
+            entity_present: True
+            entity_name: "lc_mount_0"
+            entity_pose:
+              translation: 0.02
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          sfp_mount_rail_0:
+            entity_present: True
+            entity_name: "sfp_mount_0"
+            entity_pose:
+              translation: 0.03
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          sc_mount_rail_0:
+            entity_present: True
+            entity_name: "sc_mount_0"
+            entity_pose:
+              translation: -0.02
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          lc_mount_rail_1:
+            entity_present: True
+            entity_name: "lc_mount_1"
+            entity_pose:
+              translation: -0.01
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          sfp_mount_rail_1:
+            entity_present: False
+          sc_mount_rail_1:
+            entity_present: False
+        cables:
+          cable_0:
+            pose:
+              gripper_offset:
+                x: 0.0
+                y: 0.015385
+                z: 0.04245
+              roll: 0.4432
+              pitch: -0.4838
+              yaw: 1.3303
+            attach_cable_to_gripper: True
+            cable_type: "sfp_sc_cable"
+    tasks:
+      task_1:
+        cable_type: "sfp_sc"
+        cable_name: "cable_0"
+        plug_type: "sfp"
+        plug_name: "sfp_tip"
+        port_type: "sfp"
+        port_name: "sfp_port_0"
+        target_module_name: "nic_card_mount_4"
+        time_limit: 180
+
+  # ─── TRIAL 2: MID RAIL (rail_2) + PORT_1 + CENTER TRANSLATION ───
+  # Stress: target the LEFT port (port_1) instead of right (port_0).
+  # Tests: rightmost/leftmost disambiguation. If our convention is wrong,
+  # this trial scores 0 even with v11's bidirectional scout.
+  trial_2:
+    scene:
+        task_board:
+          pose:
+            x: 0.15
+            y: -0.2
+            z: 1.14
+            roll: 0.0
+            pitch: 0.0
+            yaw: 3.1415
+          nic_rail_0:
+            entity_present: False
+          nic_rail_1:
+            entity_present: False
+          nic_rail_2:
+            entity_present: True
+            entity_name: "nic_card_2"
+            entity_pose:
+              translation: 0.0        # CENTER of rail
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0                # 0° (neutral)
+          nic_rail_3:
+            entity_present: False
+          nic_rail_4:
+            entity_present: False
+          sc_rail_0:
+            entity_present: False
+          sc_rail_1:
+            entity_present: False
+          lc_mount_rail_0:
+            entity_present: True
+            entity_name: "lc_mount_0"
+            entity_pose:
+              translation: 0.02
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          sfp_mount_rail_0:
+            entity_present: True
+            entity_name: "sfp_mount_0"
+            entity_pose:
+              translation: 0.03
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          sc_mount_rail_0:
+            entity_present: True
+            entity_name: "sc_mount_0"
+            entity_pose:
+              translation: -0.02
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          lc_mount_rail_1:
+            entity_present: True
+            entity_name: "lc_mount_1"
+            entity_pose:
+              translation: -0.01
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          sfp_mount_rail_1:
+            entity_present: False
+          sc_mount_rail_1:
+            entity_present: False
+        cables:
+          cable_0:
+            pose:
+              gripper_offset:
+                x: 0.0
+                y: 0.015385
+                z: 0.04245
+              roll: 0.4432
+              pitch: -0.4838
+              yaw: 1.3303
+            attach_cable_to_gripper: True
+            cable_type: "sfp_sc_cable"
+    tasks:
+      task_1:
+        cable_type: "sfp_sc"
+        cable_name: "cable_0"
+        plug_type: "sfp"
+        plug_name: "sfp_tip"
+        port_type: "sfp"
+        port_name: "sfp_port_1"          # ← PORT_1, not PORT_0
+        target_module_name: "nic_card_mount_2"
+        time_limit: 180
+
+  # ─── TRIAL 3: NEAR RAIL (rail_0) + MAX TRANSLATION + -10° YAW ───
+  # This is your reported "missed in rail 0" case, made harder with extreme yaw.
+  # Tests: rail 0 reliability under negative-direction extremes.
+  trial_3:
+    scene:
+        task_board:
+          pose:
+            x: 0.15
+            y: -0.2
+            z: 1.14
+            roll: 0.0
+            pitch: 0.0
+            yaw: 3.1415
+          nic_rail_0:
+            entity_present: True
+            entity_name: "nic_card_0"
+            entity_pose:
+              translation: 0.0234     # MAX positive translation
+              roll: 0.0
+              pitch: 0.0
+              yaw: -0.1745            # -10° (min)
+          nic_rail_1:
+            entity_present: False
+          nic_rail_2:
+            entity_present: False
+          nic_rail_3:
+            entity_present: False
+          nic_rail_4:
+            entity_present: False
+          sc_rail_0:
+            entity_present: False
+          sc_rail_1:
+            entity_present: False
+          lc_mount_rail_0:
+            entity_present: True
+            entity_name: "lc_mount_0"
+            entity_pose:
+              translation: 0.02
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          sfp_mount_rail_0:
+            entity_present: True
+            entity_name: "sfp_mount_0"
+            entity_pose:
+              translation: 0.03
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          sc_mount_rail_0:
+            entity_present: True
+            entity_name: "sc_mount_0"
+            entity_pose:
+              translation: -0.02
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          lc_mount_rail_1:
+            entity_present: True
+            entity_name: "lc_mount_1"
+            entity_pose:
+              translation: -0.01
+              roll: 0.0
+              pitch: 0.0
+              yaw: 0.0
+          sfp_mount_rail_1:
+            entity_present: False
+          sc_mount_rail_1:
+            entity_present: False
+        cables:
+          cable_0:
+            pose:
+              gripper_offset:
+                x: 0.0
+                y: 0.015385
+                z: 0.04245
+              roll: 0.4432
+              pitch: -0.4838
+              yaw: 1.3303
+            attach_cable_to_gripper: True
+            cable_type: "sfp_sc_cable"
+    tasks:
+      task_1:
+        cable_type: "sfp_sc"
+        cable_name: "cable_0"
+        plug_type: "sfp"
+        plug_name: "sfp_tip"
+        port_type: "sfp"
+        port_name: "sfp_port_0"
+        target_module_name: "nic_card_mount_0"
+        time_limit: 180
+
+robot:
+  home_joint_positions:
+    shoulder_pan_joint: -0.1597
+    shoulder_lift_joint: -1.3542
+    elbow_joint: -1.6648
+    wrist_1_joint: -1.6933
+    wrist_2_joint: 1.5710
+    wrist_3_joint: 1.4110

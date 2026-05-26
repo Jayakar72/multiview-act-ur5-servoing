@@ -1,0 +1,108 @@
+# ─── Python ────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+develop-eggs/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+MANIFEST
+
+# ─── Virtual environments ─────────────────────────────────────────────
+.venv/
+venv/
+env/
+.env
+.envrc
+
+# ─── Pixi ──────────────────────────────────────────────────────────────
+.pixi/
+pixi.lock
+
+# ─── Jupyter ───────────────────────────────────────────────────────────
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# ─── IDE / editor ──────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ─── Logs and runtime ──────────────────────────────────────────────────
+*.log
+log/
+logs/
+runs/
+wandb/
+*.out
+
+# ─── Model checkpoints (DO NOT COMMIT) ─────────────────────────────────
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.tflite
+aic_act_checkpoints*/
+aic_yolo_models*/
+aic_yolo_runs*/
+checkpoints/
+weights/
+
+# ─── Datasets (DO NOT COMMIT) ──────────────────────────────────────────
+aic_demos*/
+demos/
+*.h5
+*.hdf5
+*.tfrecord
+yolo_dataset*/
+data/raw/
+data/processed/
+
+# ─── ROS 2 / Colcon ────────────────────────────────────────────────────
+install/
+log/
+build/
+.colcon/
+
+# ─── Docker / build cache ──────────────────────────────────────────────
+.docker/
+docker-compose.override.yaml
+.dockerignore.local
+
+# ─── OS junk ───────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Secrets and credentials (NEVER commit) ────────────────────────────
+*.pem
+*.key
+*.crt
+.aws/
+credentials.txt
+.netrc
+.env.local
+secrets/
+*.secret
+
+# ─── Local testing artifacts ───────────────────────────────────────────
+aic_results/
+results/
+local_runs/
+v*_local_runs/
+*.bag
+*.mcap
